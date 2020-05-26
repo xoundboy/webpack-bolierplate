@@ -1,11 +1,19 @@
-import _ from 'lodash';
+import {EventEmitter} from 'events';
 
-function component() {
-    const element = document.createElement('div');
+const eventBus = new EventEmitter();
 
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-
-    return element;
+class MyPlayer {
+    constructor() {
+        eventBus.on('error', data => {
+            // do something (NEVER EXECUTES)
+            console.log("error", data);
+        });
+    }
+    init() {
+        // just emit an error event - should be handled by the listener set in the constructor
+        eventBus.emit('error', { errorData: {} });
+    }
 }
 
-document.body.appendChild(component());
+const myPlayer = new MyPlayer();
+myPlayer.init();
